@@ -21,6 +21,20 @@ export default function page() {
       });
   }
 
+  function handleCustomURL(url: string, customUrl: string) {
+    axios
+      .post("/api/users/create-custom-url", { url, customUrl })
+      .then((res) => {
+        console.log(res.data);
+        const newUrl = res.data.data.shrinkUrl;
+        const newUrlsOfUser = [...urlsOfUser, newUrl];
+        setUrlsOfUser(newUrlsOfUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
     axios
       .get("/api/users/all-urls")
@@ -38,7 +52,7 @@ export default function page() {
       <h1 className="text-4xl mt-8 font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
         Dashboard
       </h1>
-      <CreateUrlForm createShrinkedUrl={handleShrinkedURL} />
+      <CreateUrlForm createShrinkedUrl={handleShrinkedURL} createCustomUrl={handleCustomURL}/>
       <hr className=" h-[1px] w-full bg-gray-600" />
       <h1 className="text-4xl font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
         Your Links

@@ -4,16 +4,21 @@ import React, { useState } from "react";
 
 interface Props {
   createShrinkedUrl: (url: string) => void;
+  createCustomUrl: (url: string, customUrl: string) => void;
 }
 
-export default function createUrlForm({ createShrinkedUrl }: Props) {
+export default function createUrlForm({ createShrinkedUrl, createCustomUrl }: Props) {
   const [customURLDisabled, setCustomURLDisabled] = useState<boolean>(true);
   const [url, setUrl] = useState<string>("");
   const [customUrl, setCustomUrl] = useState<string>("");
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    createShrinkedUrl(url);
+    if (customURLDisabled) {
+      createShrinkedUrl(url);
+    } else {
+      createCustomUrl(url, customUrl);
+    }
   }
 
   return (

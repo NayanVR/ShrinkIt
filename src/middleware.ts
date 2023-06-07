@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getErrorResponse } from "./lib/helpers";
 import { verifyJWT } from "./lib/token";
 import { getOriginalUrlFromShortUrl } from "./lib/db/util/url";
+import { getOriginalUrlFromCustomUrl } from "./lib/db/util/custom-url";
 
 interface AuthenticatedRequest extends NextRequest {
     user: {
@@ -112,6 +113,22 @@ export async function middleware(req: NextRequest) {
         }
     }
 
+    if (customUrlRegex.test(req.nextUrl.pathname)) {
+        const username = req.nextUrl.pathname.substring(1).split("/")[0];
+        const customURL = req.nextUrl.pathname.substring(1).split("/")[1];
+        const originalURL = await getOriginalUrlFromCustomUrl(username, customURL);
+
+        if (!originalURL) {
+            return getErrorResponse(404, "URL not found");
+        } else {
+            return new NextResponse("", {
+                status: 302,
+                headers: {
+                    "Location": originalURL
+                }
+            });
+        }
+    }
 }
 
 export const config = {

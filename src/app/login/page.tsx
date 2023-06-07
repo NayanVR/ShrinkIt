@@ -19,6 +19,7 @@ export default function Login() {
       })
       .then((res) => {
         console.log(res);
+        window.location.href = "/dashboard"
       })
       .catch((err) => {
         console.error(err);
