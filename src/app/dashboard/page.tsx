@@ -52,14 +52,18 @@ export default function page() {
       <h1 className="text-4xl mt-8 font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
         Dashboard
       </h1>
-      <CreateUrlForm createShrinkedUrl={handleShrinkedURL} createCustomUrl={handleCustomURL}/>
+      <CreateUrlForm
+        createShrinkedUrl={handleShrinkedURL}
+        createCustomUrl={handleCustomURL}
+      />
       <hr className=" h-[1px] w-full bg-gray-600" />
       <h1 className="text-4xl font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
         Your Links
       </h1>
       <div className="flex flex-col gap-4 mb-4">
-        {urlsOfUser.map((url) => (
+        {urlsOfUser.map((url, i) => (
           <a
+            key={i}
             href={`http://${url}`}
             target="_blank"
             className="text-blue-500 hover:underline"

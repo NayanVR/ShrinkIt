@@ -17,7 +17,10 @@ export async function middleware(req: NextRequest) {
     const pathName = req.nextUrl.pathname;
 
     // ignore paths who doen't need authentication
-    if (pathName.startsWith("/register")) {
+    if (pathName.startsWith("/register")
+        || pathName.includes(".svg")
+        || pathName.includes(".png")
+        || pathName.includes(".ttf")) {
         return;
     }
 

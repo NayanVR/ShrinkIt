@@ -1,7 +1,17 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+const articulat = localFont({
+  src: "./ArticulatCF.ttf",
+  display: "swap",
+  variable: "--font-articulat",
+});
 
 export const metadata = {
   title: "ShrinkIt",
@@ -14,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={`${inter.variable} ${articulat.variable}`}>
+      <body className="bg-dark">{children}</body>
     </html>
   );
 }
