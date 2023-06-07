@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function Login() {
@@ -19,7 +20,7 @@ export default function Login() {
       })
       .then((res) => {
         console.log(res);
-        window.location.href = "/dashboard"
+        window.location.href = "/dashboard";
       })
       .catch((err) => {
         console.error(err);
@@ -27,37 +28,43 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full h-full p-4 flex gap-4 flex-col justify-center items-center">
-      <h1 className="text-4xl font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
-        Login
-      </h1>
-      <form
-        className="flex flex-col w-full max-w-sm gap-2"
-        onSubmit={handleSubmit}
-      >
-        <input
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-          type="text"
-          placeholder="Username"
-          className="px-4 py-2 border rounded-md"
-          required
-        />
-        <input
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          type="password"
-          placeholder="Password"
-          className="px-4 py-2 border rounded-md"
-          required
-        />
-        <button
-          type="submit"
-          className="py-2 bg-primary hover:bg-primary-dark text-white rounded-md transition-all"
-        >
+    <section className="w-full h-screen flex items-center justify-center">
+      <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
+        <h1 className="text-4xl font-extrabold leading-relaxed text-white">
           Login
-        </button>
-      </form>
-    </div>
+        </h1>
+        <form
+          className="flex flex-col w-full max-w-sm gap-2"
+          onSubmit={handleSubmit}
+        >
+          <input
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            type="text"
+            placeholder="Username"
+            className="px-4 py-2 border border-gray bg-dark text-white rounded-md"
+            required
+          />
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type="password"
+            placeholder="Password"
+            className="px-4 py-2 border border-gray bg-dark text-white rounded-md"
+            required
+          />
+          <Link href="/register" className="text-white underline text-sm">
+            Don't have an account? Register here.
+          </Link>
+          <button
+            type="submit"
+            className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
+          >
+            <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
+            Login
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }

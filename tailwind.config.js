@@ -38,13 +38,19 @@ module.exports = {
           }
         },
         secondTitle: {
-          '0%, ': {
-            backgroundImage: 'linear-gradient(90deg, #4CC700, #0C9B00)',
+          '0%': {
+            backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
           },
           '33%': {
+            backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
+          },
+          '34%, ': {
             backgroundImage: 'linear-gradient(90deg, #4CC700, #0C9B00)',
           },
-          '34%': {
+          '66%': {
+            backgroundImage: 'linear-gradient(90deg, #4CC700, #0C9B00)',
+          },
+          '67%': {
             backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
           },
           '100%': {
@@ -53,16 +59,16 @@ module.exports = {
         },
         thirdTitle: {
           '0%': {
-            backgroundImage: 'linear-gradient(90deg, #FFC700, #F2A000)',
-          },
-          '33%': {
-            backgroundImage: 'linear-gradient(90deg, #FFC700, #F2A000)',
-          },
-          '34%': {
             backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
+          },
+          '66%': {
+            backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
+          },
+          '67%': {
+            backgroundImage: 'linear-gradient(90deg, #FFC700, #F2A000)',
           },
           '100%': {
-            backgroundImage: 'linear-gradient(90deg, #FFF, #FFF)',
+            backgroundImage: 'linear-gradient(90deg, #FFC700, #F2A000)',
           }
         },
         ctaButtonBlur: {
@@ -108,8 +114,8 @@ module.exports = {
       },
       animation: {
         firstTitle: 'firstTitle 6s linear infinite',
-        secondTitle: 'secondTitle 6s 2s linear infinite',
-        thirdTitle: 'thirdTitle 6s 4s linear infinite',
+        secondTitle: 'secondTitle 6s linear infinite',
+        thirdTitle: 'thirdTitle 6s linear infinite',
         ctaButtonBlur: 'ctaButtonBlur 6s linear infinite',
         ctaButtonBorder: 'ctaButtonBorder 6s linear infinite'
       }
