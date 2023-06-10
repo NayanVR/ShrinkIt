@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         return new NextResponse(
             JSON.stringify({
                 status: "success",
-                data: { shrinkURL: hostURL + "/" + shrinkURL },
+                data: { URL: hostURL + "/" + shrinkURL },
             }),
             {
                 status: 201,

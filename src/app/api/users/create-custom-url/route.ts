@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         return new NextResponse(
             JSON.stringify({
                 status: "success",
-                data: { shrinkURL: hostURL + "/" + userId + "/" + data.customUrl },
+                data: { URL: hostURL + "/" + username + "/" + data.customUrl },
             }),
             {
                 status: 201,

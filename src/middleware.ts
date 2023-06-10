@@ -20,6 +20,8 @@ export async function middleware(req: NextRequest) {
     if (pathName.startsWith("/register")
         || pathName.includes(".svg")
         || pathName.includes(".png")
+        || pathName.includes(".ico")
+        || pathName.includes("_next")
         || pathName.includes(".ttf")) {
         return;
     }

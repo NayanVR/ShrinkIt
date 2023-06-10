@@ -2,16 +2,19 @@ import { z } from "zod";
 
 export const CreateShrinkUrlSchema = z.object({
     url: z
-        .string({ required_error: "URL is required" })
-        .min(1, "URL is required")
+        .string({ invalid_type_error: "URL must be a string" })
+        .min(1, "URL is required"),
+    name: z
+        .string({ invalid_type_error: "Name must be a string" })
+        .optional()
 });
 
 export const createCustomUrlSchema = z.object({
     url: z
-        .string({ required_error: "URL is required" })
+        .string({ invalid_type_error: "URL must be a string" })
         .min(1, "URL is required"),
     customUrl: z
-        .string({ required_error: "Custom URL is required" })
+        .string({ invalid_type_error: "CustomURL must be a string" })
         .min(1, "Custom URL is required"),
 });
 

@@ -2,19 +2,19 @@ import { z } from "zod";
 
 export const RegisterUserSchema = z.object({
     username: z
-        .string({ required_error: "Username is required" })
+        .string({ invalid_type_error: "Username must be a string" })
         .min(1, "Username is required")
         .min(3, "Username must be at least 3 characters long"),
     email: z
-        .string({ required_error: "Email is required" })
+        .string({ invalid_type_error: "Email must be a string" })
         .min(1, "Email is required")
         .email("Invalid email address"),
     password: z
-        .string({ required_error: "Password is required" })
+        .string({ invalid_type_error: "Password must be a string" })
         .min(1, "Password is required")
         .min(6, "Password must be at least 6 characters long"),
     confirmPassword: z
-        .string({ required_error: "Confirm password is required" })
+        .string({ invalid_type_error: "Confirm password must be a string" })
         .min(1, "Confirm password is required")
         .min(6, "Confirm password must be at least 6 characters long")
 })
@@ -25,11 +25,11 @@ export const RegisterUserSchema = z.object({
 
 export const LoginUserSchema = z.object({
     username: z
-        .string({ required_error: "Username is required" })
+        .string({ invalid_type_error: "Username must be a string" })
         .min(1, "Username is required")
         .min(3, "Username must be at least 3 characters long"),
     password: z
-        .string({ required_error: "Password is required" })
+        .string({ invalid_type_error: "Password must be a string" })
         .min(1, "Password is required")
         .min(6, "Password must be at least 6 characters long")
 });

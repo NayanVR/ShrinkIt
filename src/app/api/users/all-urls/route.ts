@@ -1,8 +1,7 @@
-import { getAllShrinkURLsOfUser, insertShrinkUrl } from "@/lib/db/util/url";
+import { getAllCustomURLsOfUser } from "@/lib/db/util/custom-url";
+import { getAllShrinkURLsOfUser } from "@/lib/db/util/url";
 import { getErrorResponse } from "@/lib/helpers";
-import { CreateShrinkUrlSchema } from "@/lib/validations/url.schema";
 import { NextRequest, NextResponse } from "next/server";
-import shortid from "shortid";
 import { ZodError } from "zod";
 
 export async function GET(req: NextRequest) {
@@ -18,12 +17,16 @@ export async function GET(req: NextRequest) {
         }
 
         const hostURL = req.headers.get("host");
-        const shrinkUrls = await getAllShrinkURLsOfUser(hostURL!, userId);
+        const shrinkUrls = await getAllShrinkURLsOfUser(userId);
+        const customUrls = await getAllCustomURLsOfUser(userId);
+
+        let URLs = await [...shrinkUrls!, ...customUrls!];
+        URLs = await URLs.map((url) => hostURL + "/" + url);
 
         return new NextResponse(
             JSON.stringify({
                 status: "success",
-                data: { shrinkUrls },
+                data: { URLs },
             }),
             {
                 status: 201,

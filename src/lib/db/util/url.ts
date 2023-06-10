@@ -12,10 +12,10 @@ export async function getOriginalUrlFromShortUrl(shrinkURL: string): Promise<str
     }
 }
 
-export async function getAllShrinkURLsOfUser(hostURL: string, userID: string): Promise<string[] | undefined> {
+export async function getAllShrinkURLsOfUser(userID: string): Promise<string[] | undefined> {
     try {
         return (await db.select().from(shrinkUrls).where(eq(shrinkUrls.userID, userID)))
-            .map((url) => hostURL + "/" + url.shrinkURL);
+            .map((url) => url.shrinkURL);
     } catch (e) {
         console.error(e);
         return undefined

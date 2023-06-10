@@ -25,7 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${articulat.variable}`}>
-      <body className="bg-dark">{children}</body>
+      <body className="bg-dark" suppressHydrationWarning={true}>
+        {children}
+      </body>
     </html>
   );
 }

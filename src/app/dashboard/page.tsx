@@ -1,77 +1,86 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CreateUrlForm from "./createUrlForm";
+import Image from "next/image";
+import CreateUrlForm from "./create-url-form";
 import axios from "axios";
+import Navbar from "./navbar";
+import MyLinks from "./my-links";
+import { DashboardLinkComponent } from "@/lib/types/dashboard";
 
 export default function page() {
-  const [urlsOfUser, setUrlsOfUser] = useState<string[]>([]);
+  const [linksOfUser, setLinksOfUser] = useState<DashboardLinkComponent[]>([
+    {
+      urlID: "1",
+      name: "Test",
+      shrinkURL: "https://shrinkit.com/1",
+      originalURL: "https://google.com",
+      isCustom: false,
+      visits: 0,
+      createdAt: "2021-08-01T00:00:00.000Z",
+    },
+  ]);
 
   function handleShrinkedURL(url: string) {
-    axios
-      .post("/api/users/create-shrink-url", { url })
-      .then((res) => {
-        console.log(res.data);
-        const newUrl = res.data.data.shrinkUrl;
-        const newUrlsOfUser = [...urlsOfUser, newUrl];
-        setUrlsOfUser(newUrlsOfUser);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .post("/api/users/create-shrink-url", { url })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     const newUrl = res.data.data.URL;
+    //     const newlinksOfUser = [...linksOfUser, newUrl];
+    //     setLinksOfUser(newlinksOfUser);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   function handleCustomURL(url: string, customUrl: string) {
-    axios
-      .post("/api/users/create-custom-url", { url, customUrl })
-      .then((res) => {
-        console.log(res.data);
-        const newUrl = res.data.data.shrinkUrl;
-        const newUrlsOfUser = [...urlsOfUser, newUrl];
-        setUrlsOfUser(newUrlsOfUser);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .post("/api/users/create-custom-url", { url, customUrl })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     const newUrl = res.data.data.URL;
+    //     const newlinksOfUser = [...linksOfUser, newUrl];
+    //     setLinksOfUser(newlinksOfUser);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   useEffect(() => {
-    axios
-      .get("/api/users/all-urls")
-      .then((res) => {
-        console.log(res.data);
-        setUrlsOfUser(res.data.data.shrinkUrls);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .get("/api/users/all-urls")
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setLinksOfUser(res.data.data.URLs);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, []);
 
   return (
-    <main className="mx-auto w-full flex flex-col gap-8 items-center justify-center">
-      <h1 className="text-4xl mt-8 font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
-        Dashboard
-      </h1>
-      <CreateUrlForm
-        createShrinkedUrl={handleShrinkedURL}
-        createCustomUrl={handleCustomURL}
-      />
-      <hr className=" h-[1px] w-full bg-gray-600" />
-      <h1 className="text-4xl font-extrabold bg-gradient-to-b from-primary-dark to-primary bg-clip-text leading-relaxed text-transparent">
-        Your Links
-      </h1>
-      <div className="flex flex-col gap-4 mb-4">
-        {urlsOfUser.map((url, i) => (
-          <a
-            key={i}
-            href={`http://${url}`}
-            target="_blank"
-            className="text-blue-500 hover:underline"
-          >
-            {url}
-          </a>
-        ))}
-      </div>
-    </main>
+    <>
+      <Navbar />
+      <main className="mx-auto w-full max-w-screen-2xl flex flex-col items-center justify-center text-white">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 justify-items-center md:justify-items-start px-4 md:px-36 py-16">
+          <CreateUrlForm
+            createShrinkedUrl={handleShrinkedURL}
+            createCustomUrl={handleCustomURL}
+          />
+          <Image
+            src="/shrinkit-info.png"
+            alt="How ShrinkIt Works?"
+            className="mt-12 hidden md:block lg:mr-16 w-full max-w-lg h-auto place-self-center"
+            width={500}
+            height={250}
+          />
+        </div>
+        <hr className="h-[1px] w-full border-0 bg-gradient-to-r from-transparent to-transparent via-gray opacity-25" />
+        <MyLinks linksOfUser={linksOfUser} />
+      </main>
+    </>
   );
 }
