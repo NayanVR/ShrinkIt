@@ -16,6 +16,9 @@ export const createCustomUrlSchema = z.object({
     customUrl: z
         .string({ invalid_type_error: "CustomURL must be a string" })
         .min(1, "Custom URL is required"),
+    name: z
+        .string({ invalid_type_error: "Name must be a string" })
+        .optional()
 });
 
 export type CreateShrinkUrlSchemaType = z.infer<typeof CreateShrinkUrlSchema>;

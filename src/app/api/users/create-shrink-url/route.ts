@@ -24,12 +24,19 @@ export async function POST(req: NextRequest) {
 
         const shrinkURL = shortid.generate();
 
-        await insertShrinkUrl(data.url, shrinkURL, userId);
+        if (data.name === "") data.name = shrinkURL
+
+        const URL = await insertShrinkUrl(data.url, shrinkURL, userId, data.name!);
+
+        if (!URL) {
+            return getErrorResponse(400, "Failed to create shrink url");
+        }
+        URL.hostName = hostURL!;
 
         return new NextResponse(
             JSON.stringify({
                 status: "success",
-                data: { URL: hostURL + "/" + shrinkURL },
+                data: { URL },
             }),
             {
                 status: 201,
@@ -40,7 +47,6 @@ export async function POST(req: NextRequest) {
         if (e instanceof ZodError) {
             return getErrorResponse(400, "failed validations", e);
         }
-
         return getErrorResponse(500, e.message);
     }
 }

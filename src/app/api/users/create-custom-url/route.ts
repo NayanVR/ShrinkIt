@@ -27,24 +27,32 @@ export async function POST(req: NextRequest) {
         if (!username) {
             return getErrorResponse(400, "User not found");
         } else {
-            await insertCustomUrl(data.url, data.customUrl, username, userId);
+
+            if (data.name === "") data.name = data.customUrl
+
+            const URL = await insertCustomUrl(data.url, data.customUrl, username, userId, data.name!);
+
+            if (!URL) {
+                return getErrorResponse(400, "Failed to create custom url");
+            }
+            URL.hostName = hostURL!;
+
+            return new NextResponse(
+                JSON.stringify({
+                    status: "success",
+                    data: { URL },
+                }),
+                {
+                    status: 201,
+                    headers: { "Content-Type": "application/json" },
+                }
+            )
         }
 
-        return new NextResponse(
-            JSON.stringify({
-                status: "success",
-                data: { URL: hostURL + "/" + username + "/" + data.customUrl },
-            }),
-            {
-                status: 201,
-                headers: { "Content-Type": "application/json" },
-            }
-        )
     } catch (e: any) {
         if (e instanceof ZodError) {
             return getErrorResponse(400, "failed validations", e);
         }
-
         return getErrorResponse(500, e.message);
     }
 }

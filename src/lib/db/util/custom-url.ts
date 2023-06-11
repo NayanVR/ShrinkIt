@@ -1,20 +1,34 @@
 import { v4 as uuidv4 } from "uuid";
 import { customUrls } from "../schema/custom-urls";
 import { db } from "..";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
+import { DashboardLinkComponent } from "@/lib/types/dashboard";
 
-export async function insertCustomUrl(originalURL: string, customURL: string, username: string, userID: string): Promise<void> {
+export async function insertCustomUrl(originalURL: string, customURL: string, username: string, userID: string, name: string): Promise<DashboardLinkComponent | undefined> {
     const customUrlId = uuidv4();
-    console.log(userID, username);
 
     try {
+        const newUrl: DashboardLinkComponent = {
+            urlID: customUrlId,
+            name: name,
+            shrinkURL: username + "/" + customURL,
+            originalURL: originalURL,
+            isCustom: true,
+            visits: 0,
+            hostName: "",
+            createdAt: new Date()
+        }
+
         await db.insert(customUrls).values({
             customUrlId,
             username,
             customURL,
             originalURL,
-            userID
+            userID,
+            name
         })
+
+        return newUrl;
     } catch (e) {
         console.error(e);
         return undefined
@@ -23,24 +37,51 @@ export async function insertCustomUrl(originalURL: string, customURL: string, us
 
 export async function getOriginalUrlFromCustomUrl(username: string, customURL: string): Promise<string | undefined> {
     try {
-        return (await db.select().from(customUrls).where(
+        const result = await db.select({ url: customUrls.originalURL }).from(customUrls).where(
             and(
                 eq(customUrls.username, username),
                 eq(customUrls.customURL, customURL)
             )
-        ).limit(1)).at(0)?.originalURL;
+        ).limit(1);
+
+        if (!result) return undefined;
+        return result.at(0)?.url;
     } catch (e) {
         console.error(e);
         return undefined
     }
 }
 
-export async function getAllCustomURLsOfUser(userID: string): Promise<string[] | undefined> {
+export async function getAllCustomURLsOfUser(userID: string): Promise<DashboardLinkComponent[] | undefined> {
     try {
-        return (await db.select().from(customUrls).where(eq(customUrls.userID, userID)))
-            .map((url) => url.username + "/" + url.customURL);
+        const urls = await db.select().from(customUrls).where(eq(customUrls.userID, userID)).orderBy(desc(customUrls.createdAt));
+        return urls.map((url): DashboardLinkComponent => ({
+            urlID: url.customUrlId,
+            name: url.name,
+            shrinkURL: url.username + "/" + url.customURL,
+            originalURL: url.originalURL,
+            isCustom: true,
+            visits: url.visitCount,
+            hostName: "",
+            createdAt: url.createdAt
+        }));
     } catch (e) {
         console.error(e);
         return undefined
+    }
+}
+
+export async function incrementVisitCountCustomUrl(username: string, customURL: string): Promise<void> {
+    try {
+        await db.update(customUrls).set({
+            visitCount: sql`${customUrls.visitCount} + 1`
+        }).where(
+            and(
+                eq(customUrls.username, username),
+                eq(customUrls.customURL, customURL)
+            )
+        )
+    } catch (e) {
+        console.error(e);
     }
 }

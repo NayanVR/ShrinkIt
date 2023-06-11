@@ -4,7 +4,7 @@ export const RegisterUserSchema = z.object({
     username: z
         .string({ invalid_type_error: "Username must be a string" })
         .min(1, "Username is required")
-        .min(3, "Username must be at least 3 characters long"),
+        .min(2, "Username must be at least 2 characters long"),
     email: z
         .string({ invalid_type_error: "Email must be a string" })
         .min(1, "Email is required")
@@ -27,7 +27,7 @@ export const LoginUserSchema = z.object({
     username: z
         .string({ invalid_type_error: "Username must be a string" })
         .min(1, "Username is required")
-        .min(3, "Username must be at least 3 characters long"),
+        .min(2, "Username must be at least 2 characters long"),
     password: z
         .string({ invalid_type_error: "Password must be a string" })
         .min(1, "Password is required")

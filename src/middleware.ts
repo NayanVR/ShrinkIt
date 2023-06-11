@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getErrorResponse } from "./lib/helpers";
 import { verifyJWT } from "./lib/token";
-import { getOriginalUrlFromShortUrl } from "./lib/db/util/url";
-import { getOriginalUrlFromCustomUrl } from "./lib/db/util/custom-url";
+import { getOriginalUrlFromShortUrl, incrementVisitCountShrinkUrl } from "./lib/db/util/url";
+import { getOriginalUrlFromCustomUrl, incrementVisitCountCustomUrl } from "./lib/db/util/custom-url";
 
 interface AuthenticatedRequest extends NextRequest {
     user: {
@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
 
     const pathName = req.nextUrl.pathname;
 
-    // ignore paths who doen't need authentication
+    // ignore paths who doesn't need middleware
     if (pathName.startsWith("/register")
         || pathName.includes(".svg")
         || pathName.includes(".png")
@@ -104,11 +104,13 @@ export async function middleware(req: NextRequest) {
 
     if (shortUrlRegex.test(req.nextUrl.pathname)) {
         const shrinkURL = req.nextUrl.pathname.substring(1);
+
         const originalURL = await getOriginalUrlFromShortUrl(shrinkURL);
 
         if (!originalURL) {
             return getErrorResponse(404, "URL not found");
         } else {
+            await incrementVisitCountShrinkUrl(shrinkURL);
             return new NextResponse("", {
                 status: 302,
                 headers: {
@@ -126,6 +128,7 @@ export async function middleware(req: NextRequest) {
         if (!originalURL) {
             return getErrorResponse(404, "URL not found");
         } else {
+            await incrementVisitCountCustomUrl(username, customURL);
             return new NextResponse("", {
                 status: 302,
                 headers: {

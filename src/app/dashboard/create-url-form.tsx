@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 
 interface Props {
-  createShrinkedUrl: (url: string) => void;
-  createCustomUrl: (url: string, customUrl: string) => void;
+  createShrinkedUrl: (url: string, name: string) => void;
+  createCustomUrl: (url: string, customUrl: string, name: string) => void;
 }
 
 export default function createUrlForm({
@@ -19,9 +19,9 @@ export default function createUrlForm({
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (customURLDisabled) {
-      createShrinkedUrl(url);
+      createShrinkedUrl(url, urlName);
     } else {
-      createCustomUrl(url, customUrl);
+      createCustomUrl(url, customUrl, urlName);
     }
   }
 

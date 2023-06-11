@@ -5,5 +5,6 @@ export type DashboardLinkComponent = {
     originalURL: string;
     isCustom: boolean;
     visits: number;
-    createdAt: string;
+    hostName: string;
+    createdAt: Date;
 }

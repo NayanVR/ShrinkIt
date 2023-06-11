@@ -6,10 +6,12 @@ import { DashboardLinkComponent } from "@/lib/types/dashboard";
 
 interface MyLinkProps {
   linksOfUser: DashboardLinkComponent[];
+  deleteUrl: (urlID: string, isCustom: boolean) => void;
 }
 
 interface LinkComponentProps {
   link: DashboardLinkComponent;
+  deleteUrl: (urlID: string, isCustom: boolean) => void;
 }
 
 export default function MyLinks(props: MyLinkProps) {
@@ -21,7 +23,7 @@ export default function MyLinks(props: MyLinkProps) {
       </h1>
       <div className="flex flex-col gap-4 my-4 w-full">
         {props.linksOfUser.map((link) => (
-          <LinkComponent link={link} />
+          <LinkComponent link={link} deleteUrl={props.deleteUrl} />
         ))}
       </div>
     </div>
@@ -37,7 +39,7 @@ function LinkComponent(props: LinkComponentProps) {
         </h3>
         <div className="text-sm flex w-full text-white flex-col md:flex-row md:items-center md:gap-2">
           <p className="md:max-w-[40%] text-primary overflow-ellipsis whitespace-nowrap inline-block overflow-hidden">
-            {props.link.shrinkURL}
+            {`${props.link.hostName}/${props.link.shrinkURL}`}
           </p>
           <BsArrowRight color="gray" className="md:inline-block hidden" />
           <p className="md:w-1/2 text-gray overflow-ellipsis whitespace-nowrap inline-block overflow-hidden">
@@ -54,7 +56,12 @@ function LinkComponent(props: LinkComponentProps) {
             <span className="hidden md:block">Edit</span>
             <HiOutlinePencilAlt className="md:hidden block" />
           </button>
-          <button className="bg-error border border-gray rounded-br-md h-full w-full md:w-max md:min-w-[2rem] flex justify-center items-center">
+          <button
+            onClick={(_) =>
+              props.deleteUrl(props.link.urlID, props.link.isCustom)
+            }
+            className="bg-error border border-gray rounded-br-md h-full w-full md:w-max md:min-w-[2rem] flex justify-center items-center"
+          >
             <RiDeleteBin2Line />
           </button>
         </div>

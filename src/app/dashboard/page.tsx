@@ -9,57 +9,55 @@ import MyLinks from "./my-links";
 import { DashboardLinkComponent } from "@/lib/types/dashboard";
 
 export default function page() {
-  const [linksOfUser, setLinksOfUser] = useState<DashboardLinkComponent[]>([
-    {
-      urlID: "1",
-      name: "Test",
-      shrinkURL: "https://shrinkit.com/1",
-      originalURL: "https://google.com",
-      isCustom: false,
-      visits: 0,
-      createdAt: "2021-08-01T00:00:00.000Z",
-    },
-  ]);
-
-  function handleShrinkedURL(url: string) {
-    // axios
-    //   .post("/api/users/create-shrink-url", { url })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     const newUrl = res.data.data.URL;
-    //     const newlinksOfUser = [...linksOfUser, newUrl];
-    //     setLinksOfUser(newlinksOfUser);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }
-
-  function handleCustomURL(url: string, customUrl: string) {
-    // axios
-    //   .post("/api/users/create-custom-url", { url, customUrl })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     const newUrl = res.data.data.URL;
-    //     const newlinksOfUser = [...linksOfUser, newUrl];
-    //     setLinksOfUser(newlinksOfUser);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }
+  const [linksOfUser, setLinksOfUser] = useState<DashboardLinkComponent[]>([]);
 
   useEffect(() => {
-    // axios
-    //   .get("/api/users/all-urls")
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setLinksOfUser(res.data.data.URLs);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .get("/api/users/all-urls")
+      .then((res) => {
+        console.log(res.data);
+        setLinksOfUser(res.data.data.URLs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
+
+  function handleShrinkedURL(url: string, name: string) {
+    axios
+      .post("/api/users/create-shrink-url", { url, name })
+      .then((res) => {
+        console.log(res.data);
+        const newUrl = res.data.data.URL as DashboardLinkComponent;
+        const newlinksOfUser = [newUrl, ...linksOfUser];
+        setLinksOfUser(newlinksOfUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleCustomURL(url: string, customUrl: string, name: string) {
+    axios
+      .post("/api/users/create-custom-url", { url, customUrl, name })
+      .then((res) => {
+        console.log(res.data);
+        const newUrl = res.data.data.URL as DashboardLinkComponent;
+        const newlinksOfUser = [newUrl, ...linksOfUser];
+        setLinksOfUser(newlinksOfUser);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleDeleteURL(urlID: string, isCustom: boolean) {
+    axios.post("/api/users/delete-url", { urlID, isCustom }).then((res) => {
+      console.log(res.data);
+      const newlinksOfUser = linksOfUser.filter((link) => link.urlID !== urlID);
+      setLinksOfUser(newlinksOfUser);
+    });
+  }
 
   return (
     <>
@@ -79,7 +77,7 @@ export default function page() {
           />
         </div>
         <hr className="h-[1px] w-full border-0 bg-gradient-to-r from-transparent to-transparent via-gray opacity-25" />
-        <MyLinks linksOfUser={linksOfUser} />
+        <MyLinks linksOfUser={linksOfUser} deleteUrl={handleDeleteURL} />
       </main>
     </>
   );
