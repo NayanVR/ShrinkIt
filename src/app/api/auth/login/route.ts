@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json()
         const data = LoginUserSchema.parse(body);
 
+        data.username = data.username.toLowerCase();
+
         const user = await getUser(data.username);
 
         if (!user || !(await compare(data.password, user.password))) {

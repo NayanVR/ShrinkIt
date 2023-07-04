@@ -26,7 +26,7 @@ export async function insertCustomUrl(originalURL: string, customURL: string, us
             originalURL,
             userID,
             name
-        })
+        });
 
         return newUrl;
     } catch (e) {
@@ -68,6 +68,23 @@ export async function getAllCustomURLsOfUser(userID: string): Promise<DashboardL
     } catch (e) {
         console.error(e);
         return undefined
+    }
+}
+
+export async function updateCustomUrl(link: DashboardLinkComponent): Promise<DashboardLinkComponent | undefined> {
+    try {
+        await db.update(customUrls)
+            .set({
+                name: link.name,
+                originalURL: link.originalURL,
+                customURL: link.shrinkURL.split("/")[1]
+            })
+            .where(eq(customUrls.customUrlId, link.urlID));
+
+        return link;
+    } catch (e) {
+        console.error(e)
+        return undefined;
     }
 }
 

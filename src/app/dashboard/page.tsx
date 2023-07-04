@@ -7,20 +7,48 @@ import axios from "axios";
 import Navbar from "./navbar";
 import MyLinks from "./my-links";
 import { DashboardLinkComponent } from "@/lib/types/dashboard";
+import { useDisclosure } from "@mantine/hooks";
+import EditLinkModal from "./edit-link-modal";
 
 export default function page() {
   const [linksOfUser, setLinksOfUser] = useState<DashboardLinkComponent[]>([]);
+  const [editLinkComponent, setEditLinkComponent] =
+    useState<DashboardLinkComponent>({
+      urlID: "",
+      name: "",
+      shrinkURL: "",
+      originalURL: "",
+      isCustom: false,
+      visits: 0,
+      hostName: "",
+      createdAt: new Date(),
+    });
+  const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
-    axios
-      .get("/api/users/all-urls")
-      .then((res) => {
-        console.log(res.data);
-        setLinksOfUser(res.data.data.URLs);
-      })
-      .catch((err) => {
-        console.log(err);
+    let links: DashboardLinkComponent[] = [];
+    for (let i = 0; i < 5; i++) {
+      links.push({
+        urlID: "123" + i,
+        name: "Google" + i,
+        shrinkURL: i % 2 === 0 ? "nayanvr/abc" + i : "abc" + i,
+        originalURL: "https://google.com",
+        isCustom: i % 2 === 0,
+        visits: 0,
+        hostName: "shrinkit.com",
+        createdAt: new Date(),
       });
+    }
+    setLinksOfUser(links);
+    // axios
+    //   .get("/api/users/all-urls")
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setLinksOfUser(res.data.data.URLs);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, []);
 
   function handleShrinkedURL(url: string, name: string) {
@@ -59,6 +87,29 @@ export default function page() {
     });
   }
 
+  function handleEditURL(link: DashboardLinkComponent) {
+    setEditLinkComponent(link);
+    open();
+  }
+
+  function updateLink(link: DashboardLinkComponent): void {
+    console.log(link);
+    axios
+      .post("/api/users/update-url", { link })
+      .then((res) => {
+        console.log(res.data.data.updatedUrl);
+        const updatedLink = res.data.data.updatedUrl as DashboardLinkComponent;
+        const newlinksOfUser = linksOfUser.map((l) =>
+          l.urlID === updatedLink.urlID ? updatedLink : l
+        );
+        setLinksOfUser(newlinksOfUser);
+        close();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <>
       <Navbar />
@@ -77,7 +128,17 @@ export default function page() {
           />
         </div>
         <hr className="h-[1px] w-full border-0 bg-gradient-to-r from-transparent to-transparent via-gray opacity-25" />
-        <MyLinks linksOfUser={linksOfUser} deleteUrl={handleDeleteURL} />
+        <MyLinks
+          linksOfUser={linksOfUser}
+          deleteUrl={handleDeleteURL}
+          editUrl={handleEditURL}
+        />
+        <EditLinkModal
+          opened={opened}
+          close={close}
+          link={editLinkComponent}
+          updateLink={updateLink}
+        />
       </main>
     </>
   );

@@ -61,7 +61,7 @@ export default function createUrlForm({
             Custom URL
           </label>
           <label className="text-sm text-gray">
-            (eg. mydomain.com/your-username/custom-url)
+            (eg. shrinkit.in/your-username/custom-url)
           </label>
         </div>
         <input

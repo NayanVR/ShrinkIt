@@ -56,12 +56,28 @@ export async function insertShrinkUrl(originalURL: string, shrinkURL: string, us
             shrinkURL,
             userID,
             name
-        })
+        });
 
         return newUrl;
     } catch (e) {
         console.error(e);
         return undefined
+    }
+}
+
+export async function updateShrinkUrl(link: DashboardLinkComponent): Promise<DashboardLinkComponent | undefined> {
+    try {
+        await db.update(shrinkUrls)
+            .set({
+                name: link.name,
+                originalURL: link.originalURL
+            })
+            .where(eq(shrinkUrls.urlID, link.urlID));
+
+        return link;
+    } catch (e) {
+        console.error(e)
+        return undefined;
     }
 }
 

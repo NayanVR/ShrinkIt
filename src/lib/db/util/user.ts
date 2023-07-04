@@ -1,4 +1,4 @@
-import { InferModel, eq } from "drizzle-orm";
+import { InferModel, eq, or } from "drizzle-orm";
 import { db } from "..";
 import { users } from "../schema/users";
 
@@ -10,6 +10,7 @@ export async function insertUser(user: NewUser) {
         return db.insert(users).values(user);
     } catch (e) {
         console.error(e);
+        return undefined;
     }
 }
 
@@ -28,5 +29,14 @@ export async function getUserByUID(uid: string): Promise<User | undefined> {
     } catch (e) {
         console.error(e);
         return undefined
+    }
+}
+
+export async function checkIfUserExists(username: string, email: string): Promise<User | undefined> {
+    try {
+        return (await db.select().from(users).where(or(eq(users.username, username), eq(users.email, email))).limit(1)).at(0);
+    } catch (e) {
+        console.error(e);
+        return undefined;
     }
 }
