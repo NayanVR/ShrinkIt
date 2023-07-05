@@ -43,6 +43,6 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/shortid": "^0.0.29",
     "@types/uuid": "^9.0.1",
-    "drizzle-kit": "^0.18.1"
+    "drizzle-kit": "^0.19.3"
   }
 }

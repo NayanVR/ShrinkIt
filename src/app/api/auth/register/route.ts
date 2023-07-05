@@ -1,5 +1,6 @@
 import { NewUser, insertUser, checkIfUserExists } from "@/lib/db/util/user";
 import { getEnvVariable, getErrorResponse } from "@/lib/helpers";
+import { signJWT } from "@/lib/token";
 import { RegisterUserSchema, RegisterUserSchemaType } from "@/lib/validations/user.schema";
 import { hash } from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -47,16 +48,44 @@ export async function POST(req: NextRequest) {
 
             await insertUser(newUser);
 
-            return new NextResponse(
+            const JWT_EXPIRES_IN = getEnvVariable("JWT_EXPIRES_IN");
+
+            const token = await signJWT(
+                { sub: uid },
+                { exp: `${JWT_EXPIRES_IN}m` }
+            );
+
+            const tokenMaxAge = parseInt(JWT_EXPIRES_IN) * 60;
+            const cookieOptions = {
+                name: "token",
+                value: token,
+                httpOnly: true,
+                path: "/",
+                secure: process.env.NODE_ENV !== "development",
+                maxAge: tokenMaxAge,
+            };
+
+            const response = new NextResponse(
                 JSON.stringify({
                     status: "success",
-                    data: { user: { username: newUser.username, email: newUser.email } },
+                    token,
                 }),
                 {
-                    status: 201,
+                    status: 200,
                     headers: { "Content-Type": "application/json" },
                 }
-            )
+            );
+
+            await Promise.all([
+                response.cookies.set(cookieOptions),
+                response.cookies.set({
+                    name: "logged-in",
+                    value: "true",
+                    maxAge: tokenMaxAge,
+                }),
+            ]);
+
+            return response;
         }
     } catch (e: any) {
         if (e instanceof ZodError) {
