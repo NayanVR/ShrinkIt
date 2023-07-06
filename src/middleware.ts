@@ -21,6 +21,7 @@ export async function middleware(req: NextRequest) {
         || pathName.includes(".svg")
         || pathName.includes(".png")
         || pathName.includes(".ico")
+        || pathName.includes(".mp4")
         || pathName.includes("_next")
         || pathName.includes(".ttf")) {
         return;
@@ -108,7 +109,7 @@ export async function middleware(req: NextRequest) {
         const originalURL = await getOriginalUrlFromShortUrl(shrinkURL);
 
         if (!originalURL) {
-            return getErrorResponse(404, "URL not found");
+            return NextResponse.next();
         } else {
             await incrementVisitCountShrinkUrl(shrinkURL);
             return new NextResponse("", {
@@ -126,7 +127,7 @@ export async function middleware(req: NextRequest) {
         const originalURL = await getOriginalUrlFromCustomUrl(username, customURL);
 
         if (!originalURL) {
-            return getErrorResponse(404, "URL not found");
+            return NextResponse.next();
         } else {
             await incrementVisitCountCustomUrl(username, customURL);
             return new NextResponse("", {

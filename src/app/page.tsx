@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="w-full h-screen px-4 flex flex-col items-center justify-between">
       {/* BG effect which is positioned absolute */}
-      <div
+      {/* <div
         style={{ top: 0, transform: "rotate(180deg)" }}
         className="wrap-grid-container"
       >
@@ -24,7 +24,15 @@ export default function Home() {
             return <div key={i} className="grid-item"></div>;
           })}
         </div>
-      </div>
+      </div> */}
+      <video
+        autoPlay
+        muted
+        loop
+        className="fixed top-0 left-0 right-0 bottom-0 object-cover w-screen h-screen -z-10"
+      >
+        <source src="/chains-bg.mp4" type="video/mp4" />
+      </video>
 
       {/* Top Logo */}
       <div className="w-64 h-20 relative">
