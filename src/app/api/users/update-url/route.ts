@@ -18,6 +18,8 @@ export async function POST(req: NextRequest) {
 
         const body = (await req.json()).link as DashboardLinkComponent;
 
+        if (body.name === "") body.name = body.isCustom ? body.shrinkURL.split("/")[1] : body.shrinkURL
+
         const updatedUrl = body.isCustom ? await updateCustomUrl(body) : await updateShrinkUrl(body);
 
         if (!updatedUrl) {

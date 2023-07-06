@@ -62,11 +62,7 @@ export const validateLoginForm = (values: { username: string, password: string }
 export const validateUrlForm = (values: DashboardLinkComponent) => {
     let errors = {} as DashboardLinkComponent;
 
-    if (!values.name) {
-        errors.name = 'Required';
-    } else if (values.name.length < 2) {
-        errors.name = 'Must be 2 characters or greater';
-    } else if (values.name.length > 50) {
+    if (values.name.length > 50) {
         errors.name = 'Must be 50 characters or less';
     }
 
