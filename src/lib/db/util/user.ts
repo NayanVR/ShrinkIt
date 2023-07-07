@@ -1,6 +1,7 @@
 import { InferModel, eq, or } from "drizzle-orm";
 import { db } from "..";
 import { users } from "../schema/users";
+import { passwordTokens } from "../schema/password-tokens";
 
 export type User = InferModel<typeof users>;
 export type NewUser = InferModel<typeof users, 'insert'>;
@@ -38,6 +39,17 @@ export async function getUserByEmail(email: string): Promise<User | undefined> {
     } catch (e) {
         console.error(e);
         return undefined
+    }
+}
+
+export async function resetPasswordByUID(userID: string, password: string) {
+    try {
+        await db.transaction(async (tx) => {
+            await tx.update(users).set({ password }).where(eq(users.uid, userID));
+            await tx.delete(passwordTokens).where(eq(passwordTokens.userID, userID));
+        });
+    } catch (e) {
+        console.error(e);
     }
 }
 

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from 'crypto';
 import { getUser, getUserByEmail } from "@/lib/db/util/user";
 import { sendResetPasswordEmail } from "@/lib/email";
+import { insertPasswordResetToken } from "@/lib/db/util/password-token";
 
 export async function POST(req: NextRequest) {
     try {
@@ -18,9 +19,9 @@ export async function POST(req: NextRequest) {
             return getErrorResponse(404, "User not found");
         } else {
             const hostURL = req.headers.get("host");
-            console.log(req.headers);
 
             const url = `${hostURL}/password-reset?token=${token}`;
+            await insertPasswordResetToken(token, user.uid);
             await sendResetPasswordEmail(user.email, url);
 
             return new NextResponse(
