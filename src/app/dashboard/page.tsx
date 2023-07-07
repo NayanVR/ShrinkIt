@@ -7,8 +7,9 @@ import axios from "axios";
 import Navbar from "./navbar";
 import MyLinks from "./my-links";
 import { DashboardLinkComponent } from "@/lib/types/dashboard";
-import { useDisclosure } from "@mantine/hooks";
+import { useClipboard, useDisclosure } from "@mantine/hooks";
 import EditLinkModal from "./edit-link-modal";
+import toast from "react-hot-toast";
 
 export default function page() {
   const [linksOfUser, setLinksOfUser] = useState<DashboardLinkComponent[]>([]);
@@ -24,6 +25,8 @@ export default function page() {
       createdAt: new Date(),
     });
   const [opened, { open, close }] = useDisclosure(false);
+
+  const clipboard = useClipboard({ timeout: 1000 });
 
   useEffect(() => {
     let links: DashboardLinkComponent[] = [];
@@ -57,6 +60,7 @@ export default function page() {
       .then((res) => {
         console.log(res.data);
         const newUrl = res.data.data.URL as DashboardLinkComponent;
+        copyToClipboard(newUrl.hostName + "/" + newUrl.shrinkURL);
         const newlinksOfUser = [newUrl, ...linksOfUser];
         setLinksOfUser(newlinksOfUser);
       })
@@ -71,6 +75,7 @@ export default function page() {
       .then((res) => {
         console.log(res.data);
         const newUrl = res.data.data.URL as DashboardLinkComponent;
+        copyToClipboard(newUrl.hostName + "/" + newUrl.shrinkURL);
         const newlinksOfUser = [newUrl, ...linksOfUser];
         setLinksOfUser(newlinksOfUser);
       })
@@ -108,6 +113,21 @@ export default function page() {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  function copyToClipboard(text: string) {
+    clipboard.copy(text);
+    toast.success("Copied to clipboard!", {
+      style: {
+        background: "#1e1e1e",
+        color: "#fff",
+      },
+      duration: 3000,
+      iconTheme: {
+        primary: "#4CC700",
+        secondary: "#1e1e1e",
+      },
+    });
   }
 
   return (

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-type EnvVariableKey = "JWT_SECRET_KEY" | "JWT_EXPIRES_IN" | "DATABASE_URL" | "DATABASE_HOST" | "DATABASE_USERNAME" | "DATABASE_PASSWORD" | "PASSWORD_HASH_SALT";
+type EnvVariableKey = "JWT_SECRET_KEY" | "JWT_EXPIRES_IN" | "DATABASE_URL" | "DATABASE_HOST" | "DATABASE_USERNAME" | "DATABASE_PASSWORD" | "PASSWORD_HASH_SALT" | "SMTP_EMAIL" | "SMTP_PASSWORD";
 
 export function getEnvVariable(key: EnvVariableKey): string {
     const value = process.env[key]
