@@ -60,8 +60,10 @@ function LinkComponent(props: LinkComponentProps) {
   return (
     <div
       className={`w-full h-20 py-2 pr-2 pl-4 border ${
-        clipboard.copied ? "border-tertiary" : "border-gray"
-      } bg-[#0e0e0ea1] flex justify-between items-center rounded-lg`}
+        clipboard.copied
+          ? "border-tertiary bg-[#4eff2b0a]"
+          : "border-gray bg-[#0e0e0ea1]"
+      } flex justify-between items-center rounded-lg`}
     >
       <div
         onClick={copyToClipboard}
