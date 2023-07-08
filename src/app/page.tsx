@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
+import AnonUrlForm from "./anon-url-form";
 
 export default function Home() {
   return (
@@ -72,12 +73,18 @@ export default function Home() {
         </p>
         <Link
           href={"/login"}
-          className="mt-4 px-6 py-2 rounded-md bg-dark text-white border animate-ctaButtonBorder hover:bg-white hover:text-dark transition-all text-lg relative"
+          className="my-4 px-6 py-2 rounded-md bg-dark text-white border animate-ctaButtonBorder hover:bg-white hover:text-dark transition-all text-lg relative"
         >
           <div className="-z-10 absolute top-0 left-0 w-full h-full animate-ctaButtonBlur blur-xl"></div>
           Shrinkit
           <BsArrowRight className="inline-block ml-2" />
         </Link>
+        <div className="flex items-center w-full max-w-xs gap-4">
+          <hr className="w-full text-gray opacity-50" />
+          OR
+          <hr className="w-full text-gray opacity-50" />
+        </div>
+        <AnonUrlForm />
       </div>
 
       {/* dummy div for flex alignment */}
