@@ -9,6 +9,8 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json() as { userIdentifier: string };
 
+        console.log(body);
+
         let token = crypto.randomBytes(48).toString('hex');
 
         const userIdentifier = body.userIdentifier.trim();

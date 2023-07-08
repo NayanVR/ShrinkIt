@@ -26,11 +26,7 @@ export const validateRegistrationForm = (values: RegisterUserSchemaType) => {
         errors.password = 'Must be 6 characters or greater';
     }
 
-    if (!values.confirmPassword) {
-        errors.confirmPassword = 'Required';
-    } else if (values.confirmPassword.length < 6) {
-        errors.confirmPassword = 'Must be 6 characters or greater';
-    } else if (values.password !== values.confirmPassword) {
+    if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'Passwords do not match';
     }
 

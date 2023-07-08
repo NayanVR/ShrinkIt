@@ -10,7 +10,7 @@ interface PasswordToken {
 
 export async function insertPasswordResetToken(token: string, userID: string) {
     // token expires in 30 minutes
-    const tokenExpiry = new Date(Date.now());
+    const tokenExpiry = new Date(Date.now() + 1000 * 60 * 30);
     try {
         await db.insert(passwordTokens).values({ token, userID, tokenExpiry });
     } catch (e) {

@@ -1,32 +1,54 @@
 "use client";
 
 import axios from "axios";
-import Link from "next/link";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { LoginUserSchemaType } from "@/lib/validations/user.schema";
 import { useFormik } from "formik";
-import { validateLoginForm } from "@/lib/validations/forms";
-import { toast } from "react-hot-toast";
+import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
+import toast from "react-hot-toast";
 
-export default function Login() {
+export default function PasswordReset() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
 
   const formik = useFormik({
     initialValues: {
-      username: "",
       password: "",
-    } as LoginUserSchemaType,
-    validate: validateLoginForm,
-    onSubmit: (values: LoginUserSchemaType) => {
+      confirmPassword: "",
+    } as { password: string; confirmPassword: string },
+    validate: (values) => {
+      const errors: any = {};
+      if (!values.password) {
+        errors.password = "Required";
+      } else if (values.password.length < 6) {
+        errors.password = "Must be 6 characters or greater";
+      }
+
+      if (values.password !== values.confirmPassword) {
+        errors.confirmPassword = "Passwords do not match";
+      }
+      return errors;
+    },
+    onSubmit: (values) => {
       axios
-        .post("/api/auth/login", {
-          username: values.username,
+        .post(`/api/auth/reset-password?token=${token}`, {
           password: values.password,
         })
         .then((res) => {
           console.log(res);
-          router.push("/dashboard");
+          toast.success(res.data.message, {
+            style: {
+              background: "#1e1e1e",
+              color: "#fff",
+            },
+            duration: 5000,
+            iconTheme: {
+              primary: "#4CC700",
+              secondary: "#1e1e1e",
+            },
+          });
+          router.push("/login");
         })
         .catch((err) => {
           toast.error(err.response.data.message, {
@@ -45,23 +67,12 @@ export default function Login() {
     <section className="w-full h-screen flex items-center justify-center">
       <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
         <h1 className="text-4xl font-heading font-extrabold leading-relaxed text-white">
-          Login
+          Reset Password
         </h1>
         <form
           className="flex flex-col w-full max-w-sm gap-2"
           onSubmit={formik.handleSubmit}
         >
-          {formik.errors.username && (
-            <div className="text-error text-sm">{formik.errors.username}</div>
-          )}
-          <input
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            id="username"
-            type="text"
-            placeholder="Username"
-            className="px-4 py-2 border border-gray bg-dark text-white placeholder:text-gray rounded-md"
-          />
           {formik.errors.password && (
             <div className="text-error text-sm">{formik.errors.password}</div>
           )}
@@ -73,21 +84,25 @@ export default function Login() {
             placeholder="Password"
             className="px-4 py-2 border border-gray bg-dark text-white placeholder:text-gray rounded-md"
           />
-          <Link href="/register" className="text-white underline text-sm">
-            Don't have an account? Register here
-          </Link>
-          <Link
-            href="/forgot-password"
-            className="text-white underline text-sm"
-          >
-            Forgot Password?
-          </Link>
+          {formik.errors.confirmPassword && (
+            <div className="text-error text-sm">
+              {formik.errors.confirmPassword}
+            </div>
+          )}
+          <input
+            onChange={formik.handleChange}
+            value={formik.values.confirmPassword}
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm Password"
+            className="px-4 py-2 border border-gray bg-dark text-white placeholder:text-gray rounded-md"
+          />
           <button
             type="submit"
             className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
           >
             <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
-            Login
+            Submit
           </button>
         </form>
       </div>

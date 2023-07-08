@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${articulat.variable}`}>
-      <body className="bg-dark" suppressHydrationWarning={true}>
+      <body className="bg-dark font-sans" suppressHydrationWarning={true}>
         <RootStyleRegistry>{children}</RootStyleRegistry>
         <Toaster />
       </body>

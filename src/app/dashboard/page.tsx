@@ -29,29 +29,29 @@ export default function page() {
   const clipboard = useClipboard({ timeout: 1000 });
 
   useEffect(() => {
-    let links: DashboardLinkComponent[] = [];
-    for (let i = 0; i < 5; i++) {
-      links.push({
-        urlID: "123" + i,
-        name: "Google" + i,
-        shrinkURL: i % 2 === 0 ? "nayanvr/abc" + i : "abc" + i,
-        originalURL: "https://google.com",
-        isCustom: i % 2 === 0,
-        visits: 0,
-        hostName: "shrinkit.com",
-        createdAt: new Date(),
-      });
-    }
-    setLinksOfUser(links);
-    // axios
-    //   .get("/api/users/all-urls")
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setLinksOfUser(res.data.data.URLs);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
+    // let links: DashboardLinkComponent[] = [];
+    // for (let i = 0; i < 5; i++) {
+    //   links.push({
+    //     urlID: "123" + i,
+    //     name: "Google" + i,
+    //     shrinkURL: i % 2 === 0 ? "nayanvr/abc" + i : "abc" + i,
+    //     originalURL: "https://google.com",
+    //     isCustom: i % 2 === 0,
+    //     visits: 0,
+    //     hostName: "shrinkit.com",
+    //     createdAt: new Date(),
     //   });
+    // }
+    // setLinksOfUser(links);
+    axios
+      .get("/api/users/all-urls")
+      .then((res) => {
+        console.log(res.data);
+        setLinksOfUser(res.data.data.URLs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   function handleShrinkedURL(url: string, name: string) {
