@@ -20,6 +20,12 @@ export async function POST(req: NextRequest) {
 
         if (body.name === "") body.name = body.isCustom ? body.shrinkURL.split("/")[1] : body.shrinkURL
 
+        if (body.isCustom) {
+            const username = body.shrinkURL.split("/")[0];
+            const customUrl = body.shrinkURL.split("/")[1];
+            body.shrinkURL = username + "/" + customUrl.toLowerCase().replaceAll(" ", "-");
+        }
+
         const updatedUrl = body.isCustom ? await updateCustomUrl(body) : await updateShrinkUrl(body);
 
         if (!updatedUrl) {

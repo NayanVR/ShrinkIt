@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
         const body = await req.json()
         const data = CreateCustomUrlSchema.parse(body);
 
+        data.customUrl = data.customUrl.toLowerCase().replaceAll(" ", "-");
+
         const hostURL = req.headers.get("host");
 
         const username = await (await getUserByUID(userId))?.username;

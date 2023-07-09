@@ -1,6 +1,5 @@
 import { insertShrinkUrl } from "@/lib/db/util/url";
 import { getEnvVariable, getErrorResponse } from "@/lib/helpers";
-import { CreateShrinkUrlSchema } from "@/lib/validations/url.schema";
 import { NextRequest, NextResponse } from "next/server";
 import shortid from "shortid";
 import { ZodError } from "zod";

@@ -95,7 +95,7 @@ function LinkComponent(props: LinkComponentProps) {
             onClick={(_) => {
               props.editUrl(props.link);
             }}
-            className="bg-dark text-gray border border-gray rounded-bl-md h-full w-full flex justify-center items-center"
+            className="bg-dark text-white border border-gray rounded-bl-md h-full w-full flex justify-center items-center"
           >
             <span className="hidden md:block">Edit</span>
             <HiOutlinePencilAlt className="md:hidden block" />
