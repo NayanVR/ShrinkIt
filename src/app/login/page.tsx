@@ -8,6 +8,7 @@ import { LoginUserSchemaType } from "@/lib/validations/user.schema";
 import { useFormik } from "formik";
 import { validateLoginForm } from "@/lib/validations/forms";
 import { toast } from "react-hot-toast";
+import HeroBGEffect from "@/components/HeroBGEffect";
 
 export default function Login() {
   const router = useRouter();
@@ -42,7 +43,8 @@ export default function Login() {
   });
 
   return (
-    <section className="w-full h-screen flex items-center justify-center">
+    <section className="w-full h-screen flex items-center justify-center overflow-hidden relative">
+      <HeroBGEffect />
       <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
         <h1 className="text-4xl font-heading font-extrabold leading-relaxed text-white">
           Login

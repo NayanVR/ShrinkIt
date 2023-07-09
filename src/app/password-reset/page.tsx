@@ -1,5 +1,6 @@
 "use client";
 
+import HeroBGEffect from "@/components/HeroBGEffect";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -64,7 +65,8 @@ export default function PasswordReset() {
   });
 
   return (
-    <section className="w-full h-screen flex items-center justify-center">
+    <section className="w-full h-screen flex items-center justify-center overflow-hidden relative">
+      <HeroBGEffect />
       <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
         <h1 className="text-4xl font-heading font-extrabold leading-relaxed text-white">
           Reset Password

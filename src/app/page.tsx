@@ -2,38 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsArrowRight } from "react-icons/bs";
 import AnonUrlForm from "./anon-url-form";
+import HeroBGEffect from "@/components/HeroBGEffect";
 
 export default function Home() {
   return (
-    <main className="w-full h-screen px-4 flex flex-col items-center justify-between">
-      {/* BG effect which is positioned absolute */}
-      {/* <div
-        style={{ top: 0, transform: "rotate(180deg)" }}
-        className="wrap-grid-container"
-      >
-        <div className="grid-container">
-          <div className="grid-top-gradient"></div>
-          {[...Array(250)].map((_, i) => {
-            return <div key={i} className="grid-item"></div>;
-          })}
-        </div>
-      </div>
-      <div className="wrap-grid-container">
-        <div className="grid-container">
-          <div className="grid-top-gradient"></div>
-          {[...Array(250)].map((_, i) => {
-            return <div key={i} className="grid-item"></div>;
-          })}
-        </div>
-      </div> */}
-      <video
-        autoPlay
-        muted
-        loop
-        className="fixed top-0 left-0 right-0 bottom-0 object-cover w-screen h-screen -z-10"
-      >
-        <source src="/chains-bg.mp4" type="video/mp4" />
-      </video>
+    <main className="w-full h-screen px-4 flex flex-col items-center justify-between relative overflow-hidden">
+      <HeroBGEffect />
 
       {/* Top Logo */}
       <div className="w-64 h-20 relative">
@@ -88,7 +62,7 @@ export default function Home() {
       </div>
 
       {/* dummy div for flex alignment */}
-      <div></div>
+      <div className="h-8"></div>
     </main>
   );
 }

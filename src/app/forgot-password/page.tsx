@@ -5,6 +5,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import { toast } from "react-hot-toast";
+import HeroBGEffect from "@/components/HeroBGEffect";
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -55,7 +56,8 @@ export default function ForgotPassword() {
   });
 
   return (
-    <section className="w-full h-screen flex items-center justify-center">
+    <section className="w-full h-screen flex items-center justify-center overflow-hidden relative">
+      <HeroBGEffect />
       <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
         <h1 className="text-3xl font-heading font-extrabold leading-relaxed text-white">
           Reset Password Request

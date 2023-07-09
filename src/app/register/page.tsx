@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import { RegisterUserSchemaType } from "@/lib/validations/user.schema";
 import { validateRegistrationForm } from "@/lib/validations/forms";
+import HeroBGEffect from "@/components/HeroBGEffect";
 
 export default function Register() {
   const router = useRouter();
@@ -39,28 +40,8 @@ export default function Register() {
   });
 
   return (
-    <section className="w-full h-screen flex items-center justify-center">
-      {/* BG effect which is positioned absolute */}
-      {/* <div
-        style={{ top: 0, transform: "rotate(180deg)" }}
-        className="wrap-grid-container"
-      >
-        <div className="grid-container">
-          <div className="grid-top-gradient"></div>
-          {[...Array(250)].map((_, i) => {
-            return <div key={i} className="grid-item"></div>;
-          })}
-        </div>
-      </div>
-      <div className="wrap-grid-container">
-        <div className="grid-container">
-          <div className="grid-top-gradient"></div>
-          {[...Array(250)].map((_, i) => {
-            return <div key={i} className="grid-item"></div>;
-          })}
-        </div>
-      </div> */}
-
+    <section className="w-full h-screen flex items-center justify-center overflow-hidden relative">
+      <HeroBGEffect />
       <div className="w-full p-4 flex gap-4 flex-col justify-center items-center">
         <h1 className="text-4xl font-heading font-extrabold leading-relaxed text-white">
           Register
