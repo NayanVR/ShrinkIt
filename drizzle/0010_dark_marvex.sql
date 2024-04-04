@@ -1,0 +1,1 @@
+ALTER TABLE `custom_urls` RENAME COLUMN `shrink_url` TO `custom_url`;
