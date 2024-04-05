@@ -4,15 +4,15 @@ import { passwordTokens } from "../schema/password-tokens";
 
 interface PasswordToken {
     token: string;
-    userID: string;
-    tokenExpiry: Date;
+    userId: string;
+    tokenExpiry: string;
 }
 
 export async function insertPasswordResetToken(token: string, userID: string) {
     // token expires in 30 minutes
     const tokenExpiry = new Date(Date.now() + 1000 * 60 * 30);
     try {
-        await db.insert(passwordTokens).values({ token, userID, tokenExpiry });
+        await db.insert(passwordTokens).values({ token, userId: userID, tokenExpiry: tokenExpiry.toISOString() });
     } catch (e) {
         console.error(e);
     }

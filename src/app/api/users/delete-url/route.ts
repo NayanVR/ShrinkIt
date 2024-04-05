@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
         if (body.isCustom) {
             await db.delete(customUrls).where(eq(customUrls.customUrlId, body.urlID));
         } else {
-            await db.delete(shrinkUrls).where(eq(shrinkUrls.urlID, body.urlID));
+            await db.delete(shrinkUrls).where(eq(shrinkUrls.urlId, body.urlID));
         }
 
         return new NextResponse(

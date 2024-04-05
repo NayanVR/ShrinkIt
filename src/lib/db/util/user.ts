@@ -46,7 +46,7 @@ export async function resetPasswordByUID(userID: string, password: string) {
     try {
         await db.transaction(async (tx) => {
             await tx.update(users).set({ password }).where(eq(users.uid, userID));
-            await tx.delete(passwordTokens).where(eq(passwordTokens.userID, userID));
+            await tx.delete(passwordTokens).where(eq(passwordTokens.userId, userID));
         });
     } catch (e) {
         console.error(e);

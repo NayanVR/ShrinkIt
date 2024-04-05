@@ -22,9 +22,9 @@ export async function insertCustomUrl(originalURL: string, customURL: string, us
         await db.insert(customUrls).values({
             customUrlId,
             username,
-            customURL,
-            originalURL,
-            userID,
+            customUrl: customURL,
+            originalUrl: originalURL,
+            userId: userID,
             name
         });
 
@@ -37,10 +37,10 @@ export async function insertCustomUrl(originalURL: string, customURL: string, us
 
 export async function getOriginalUrlFromCustomUrl(username: string, customURL: string): Promise<string | undefined> {
     try {
-        const result = await db.select({ url: customUrls.originalURL }).from(customUrls).where(
+        const result = await db.select({ url: customUrls.originalUrl }).from(customUrls).where(
             and(
                 eq(customUrls.username, username),
-                eq(customUrls.customURL, customURL)
+                eq(customUrls.customUrl, customURL)
             )
         ).limit(1);
 
@@ -54,16 +54,16 @@ export async function getOriginalUrlFromCustomUrl(username: string, customURL: s
 
 export async function getAllCustomURLsOfUser(userID: string): Promise<DashboardLinkComponent[] | undefined> {
     try {
-        const urls = await db.select().from(customUrls).where(eq(customUrls.userID, userID)).orderBy(desc(customUrls.createdAt));
+        const urls = await db.select().from(customUrls).where(eq(customUrls.userId, userID)).orderBy(desc(customUrls.createdAt));
         return urls.map((url): DashboardLinkComponent => ({
             urlID: url.customUrlId,
             name: url.name,
-            shrinkURL: url.username + "/" + url.customURL,
-            originalURL: url.originalURL,
+            shrinkURL: url.username + "/" + url.customUrl,
+            originalURL: url.originalUrl,
             isCustom: true,
             visits: url.visitCount,
             hostName: "",
-            createdAt: url.createdAt
+            createdAt: new Date(url.createdAt)
         }));
     } catch (e) {
         console.error(e);
@@ -76,8 +76,8 @@ export async function updateCustomUrl(link: DashboardLinkComponent): Promise<Das
         await db.update(customUrls)
             .set({
                 name: link.name,
-                originalURL: link.originalURL,
-                customURL: link.shrinkURL.split("/")[1]
+                originalUrl: link.originalURL,
+                customUrl: link.shrinkURL.split("/")[1]
             })
             .where(eq(customUrls.customUrlId, link.urlID));
 
@@ -95,7 +95,7 @@ export async function incrementVisitCountCustomUrl(username: string, customURL: 
         }).where(
             and(
                 eq(customUrls.username, username),
-                eq(customUrls.customURL, customURL)
+                eq(customUrls.customUrl, customURL)
             )
         )
     } catch (e) {
