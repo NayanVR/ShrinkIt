@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
             if (tokenExpiry < new Date()) {
                 return getErrorResponse(400, "Token expired");
             } else {
-                await resetPasswordByUID(tokenData.userID, hashedPassword);
+                await resetPasswordByUID(tokenData.userId, hashedPassword);
 
                 return new NextResponse(
                     JSON.stringify({

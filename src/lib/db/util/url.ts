@@ -6,7 +6,7 @@ import { DashboardLinkComponent } from "@/lib/types/dashboard";
 
 export async function getOriginalUrlFromShortUrl(shrinkURL: string): Promise<string | undefined> {
     try {
-        const result = await db.select({ url: shrinkUrls.originalURL }).from(shrinkUrls).where(eq(shrinkUrls.shrinkURL, shrinkURL)).limit(1);
+        const result = await db.select({ url: shrinkUrls.originalUrl }).from(shrinkUrls).where(eq(shrinkUrls.shrinkUrl, shrinkURL)).limit(1);
 
         if (!result) return undefined;
         return result.at(0)?.url;
@@ -18,16 +18,16 @@ export async function getOriginalUrlFromShortUrl(shrinkURL: string): Promise<str
 
 export async function getAllShrinkURLsOfUser(userID: string): Promise<DashboardLinkComponent[] | undefined> {
     try {
-        const urls = await db.select().from(shrinkUrls).where(eq(shrinkUrls.userID, userID)).orderBy(desc(shrinkUrls.createdAt));
+        const urls = await db.select().from(shrinkUrls).where(eq(shrinkUrls.userId, userID)).orderBy(desc(shrinkUrls.createdAt));
         return urls.map((url): DashboardLinkComponent => ({
-            urlID: url.urlID,
+            urlID: url.urlId,
             name: url.name,
-            shrinkURL: url.shrinkURL,
-            originalURL: url.originalURL,
+            shrinkURL: url.shrinkUrl,
+            originalURL: url.originalUrl,
             isCustom: false,
             visits: url.visitCount,
             hostName: "",
-            createdAt: url.createdAt
+            createdAt: new Date(url.createdAt)
         }));
     } catch (e) {
         console.error(e);
@@ -51,10 +51,10 @@ export async function insertShrinkUrl(originalURL: string, shrinkURL: string, us
         }
 
         await db.insert(shrinkUrls).values({
-            urlID,
-            originalURL,
-            shrinkURL,
-            userID,
+            urlId: urlID,
+            originalUrl: originalURL,
+            shrinkUrl: shrinkURL,
+            userId: userID,
             name
         });
 
@@ -70,9 +70,9 @@ export async function updateShrinkUrl(link: DashboardLinkComponent): Promise<Das
         await db.update(shrinkUrls)
             .set({
                 name: link.name,
-                originalURL: link.originalURL
+                originalUrl: link.originalURL
             })
-            .where(eq(shrinkUrls.urlID, link.urlID));
+            .where(eq(shrinkUrls.urlId, link.urlID));
 
         return link;
     } catch (e) {
@@ -85,7 +85,7 @@ export async function incrementVisitCountShrinkUrl(shrinkURL: string): Promise<v
     try {
         await db.update(shrinkUrls).set({
             visitCount: sql`${shrinkUrls.visitCount} + 1`
-        }).where(eq(shrinkUrls.shrinkURL, shrinkURL));
+        }).where(eq(shrinkUrls.shrinkUrl, shrinkURL));
     } catch (e) {
         console.error(e)
     }
