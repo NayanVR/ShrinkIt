@@ -21,7 +21,7 @@ export default function ForgotPassword() {
       }
       return errors;
     },
-    onSubmit: (values: { userIdentifier: string }) => {
+    onSubmit: (values: { userIdentifier: string }, { setSubmitting }) => {
       console.log(values);
       axios
         .post("/api/auth/password-reset-request", {
@@ -51,6 +51,9 @@ export default function ForgotPassword() {
             duration: 3000,
           });
           console.error(err.response.data);
+        })
+        .finally(() => {
+          setSubmitting(false);
         });
     },
   });
@@ -85,10 +88,11 @@ export default function ForgotPassword() {
           </p>
           <button
             type="submit"
+            disabled={formik.isSubmitting}
             className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
           >
             <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
-            Submit
+            {formik.isSubmitting ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
       </div>

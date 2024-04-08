@@ -19,7 +19,7 @@ export default function Login() {
       password: "",
     } as LoginUserSchemaType,
     validate: validateLoginForm,
-    onSubmit: (values: LoginUserSchemaType) => {
+    onSubmit: (values: LoginUserSchemaType, { setSubmitting }) => {
       axios
         .post("/api/auth/login", {
           username: values.username,
@@ -38,6 +38,9 @@ export default function Login() {
             duration: 3000,
           });
           console.error(err.response.data);
+        })
+        .finally(() => {
+          setSubmitting(false);
         });
     },
   });
@@ -86,10 +89,11 @@ export default function Login() {
           </Link>
           <button
             type="submit"
+            disabled={formik.isSubmitting}
             className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
           >
             <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
-            Login
+            {formik.isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

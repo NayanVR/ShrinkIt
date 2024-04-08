@@ -17,7 +17,8 @@ const articulat = localFont({
 
 export const metadata = {
   title: "ShrinkIt",
-  description: "Shrink your links!",
+  description:
+    "Shorten your URLs or Links with ease and track them with ShrinkIt",
 };
 
 export default function RootLayout({

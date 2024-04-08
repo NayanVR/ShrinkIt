@@ -31,7 +31,7 @@ export default function PasswordReset() {
       }
       return errors;
     },
-    onSubmit: (values) => {
+    onSubmit: (values, { setSubmitting }) => {
       axios
         .post(`/api/auth/reset-password?token=${token}`, {
           password: values.password,
@@ -60,6 +60,9 @@ export default function PasswordReset() {
             duration: 3000,
           });
           console.error(err.response.data);
+        })
+        .finally(() => {
+          setSubmitting(false);
         });
     },
   });
@@ -101,10 +104,11 @@ export default function PasswordReset() {
           />
           <button
             type="submit"
+            disabled={formik.isSubmitting}
             className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
           >
             <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
-            Submit
+            {formik.isSubmitting ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </div>

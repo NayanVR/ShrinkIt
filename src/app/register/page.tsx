@@ -20,7 +20,10 @@ export default function Register() {
       confirmPassword: "",
     } as RegisterUserSchemaType,
     validate: validateRegistrationForm,
-    onSubmit: (values: RegisterUserSchemaType, { setErrors }) => {
+    onSubmit: (
+      values: RegisterUserSchemaType,
+      { setErrors, setSubmitting }
+    ) => {
       axios
         .post("/api/auth/register", {
           username: values.username,
@@ -35,6 +38,9 @@ export default function Register() {
         .catch((err) => {
           console.error(err.response.data);
           setErrors(err.response.data.errors);
+        })
+        .finally(() => {
+          setSubmitting(false);
         });
     },
   });
@@ -101,10 +107,11 @@ export default function Register() {
           </Link>
           <button
             type="submit"
+            disabled={formik.isSubmitting}
             className="group py-2 my-4 bg-dark hover:bg-white hover:text-dark border-primary border text-white rounded-md transition-all relative"
           >
             <div className="-z-10 absolute top-0 left-0 w-full h-full bg-primary blur-xl group-hover:blur-lg transition-all"></div>
-            Register
+            {formik.isSubmitting ? "Please wait..." : "Register"}
           </button>
         </form>
       </div>
